@@ -29,6 +29,7 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 // GLOBAL OBJECTS //
 
 // GLOBAL BOOLEANS //
+boolean keyLeft, keyRight, keyUp, keyDown;
 
 // GLOBAL ARRAYLISTS //
 
@@ -96,4 +97,18 @@ void controlGameState() {
       break;
   }
 
+}
+
+void keyPressed() {
+  if (key == CODED && keyCode == RIGHT || key = 'd' || key == 'D') keyRight = true;
+  if (key == CODED && keyCode == LEFT || key = 'a' || key == 'A') keyLeft = true;
+  if (key == CODED && keyCode == UP || key = 'w' || key == 'W') keyUp = true;
+  if (key == CODED && keyCode == DOWN || key = 's' || key == 'S') keyDown = true;
+}
+
+void keyReleased() {
+  if (key == CODED && keyCode == RIGHT || key = 'd' || key == 'D') keyRight = false;
+  if (key == CODED && keyCode == LEFT || key = 'a' || key == 'A') keyLeft = false;
+  if (key == CODED && keyCode == UP || key = 'w' || key == 'W') keyUp = false;
+  if (key == CODED && keyCode == DOWN || key = 's' || key == 'S') keyDown = false;
 }
