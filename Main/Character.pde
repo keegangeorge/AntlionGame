@@ -40,4 +40,10 @@ class Character {
 
 
   }
+
+  void update() {
+    render();
+    moveCharacter();
+    detectBoundaries();
+  }
 }
