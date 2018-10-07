@@ -1,14 +1,15 @@
 class Ant extends Character {
   // FIELDS //
   float health;
+  float acc = 6;
   PVector upAcc = new PVector(0, -acc);
   PVector downAcc = new PVector(0, acc);
   PVector leftAcc = new PVector(-acc, 0);
   PVector rightAcc = new PVector(acc, 0);
 
   // CONSTRUCTOR //
-  Ant(PVector pos) {
-    super(pos);
+  Ant(PVector pos, PVector size) {
+    super(pos, size);
     health = 100;
   }
 

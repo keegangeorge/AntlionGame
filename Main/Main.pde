@@ -27,6 +27,7 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 // GLOBAL FONTS //
 
 // GLOBAL OBJECTS //
+Ant ant;
 
 // GLOBAL BOOLEANS //
 boolean keyLeft, keyRight, keyUp, keyDown;
@@ -58,7 +59,7 @@ void setup() {
  *
  */
 void initObjects() {
-
+  ant = new Ant(new PVector(500, 500), new PVector (100, 100));
 }
 
 /**
@@ -66,8 +67,9 @@ void initObjects() {
  *
  */
 void draw() {
-  background(0, 255, 0);
+  background(255);
   controlGameState();
+  ant.update();
 }
 
 void controlGameState() {
@@ -100,15 +102,15 @@ void controlGameState() {
 }
 
 void keyPressed() {
-  if (key == CODED && keyCode == RIGHT || key = 'd' || key == 'D') keyRight = true;
-  if (key == CODED && keyCode == LEFT || key = 'a' || key == 'A') keyLeft = true;
-  if (key == CODED && keyCode == UP || key = 'w' || key == 'W') keyUp = true;
-  if (key == CODED && keyCode == DOWN || key = 's' || key == 'S') keyDown = true;
+  if (key == CODED && keyCode == RIGHT || key == 'd' || key == 'D') keyRight = true;
+  if (key == CODED && keyCode == LEFT || key == 'a' || key == 'A') keyLeft = true;
+  if (key == CODED && keyCode == UP || key == 'w' || key == 'W') keyUp = true;
+  if (key == CODED && keyCode == DOWN || key == 's' || key == 'S') keyDown = true;
 }
 
 void keyReleased() {
-  if (key == CODED && keyCode == RIGHT || key = 'd' || key == 'D') keyRight = false;
-  if (key == CODED && keyCode == LEFT || key = 'a' || key == 'A') keyLeft = false;
-  if (key == CODED && keyCode == UP || key = 'w' || key == 'W') keyUp = false;
-  if (key == CODED && keyCode == DOWN || key = 's' || key == 'S') keyDown = false;
+  if (key == CODED && keyCode == RIGHT || key == 'd' || key == 'D') keyRight = false;
+  if (key == CODED && keyCode == LEFT || key == 'a' || key == 'A') keyLeft = false;
+  if (key == CODED && keyCode == UP || key == 'w' || key == 'W') keyUp = false;
+  if (key == CODED && keyCode == DOWN || key == 's' || key == 'S') keyDown = false;
 }

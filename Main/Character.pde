@@ -3,10 +3,13 @@ class Character {
   PVector pos, vel;
   PVector size;
   float dampener = 0.8;
+  color mainColor = color(0, 255, 0);
 
   // CONSTRUCTOR //
-  Character(PVector pos) {
+  Character(PVector pos, PVector size) {
     this.pos = pos;
+    this.size = size;
+    vel = new PVector();
   }
 
   // METHODS //
@@ -22,7 +25,7 @@ class Character {
   void render() {
     pushMatrix();
     fill(mainColor);
-    translate(pos.x,pos.y)
+    translate(pos.x,pos.y);
     ellipse(0, 0, size.x, size.y);
     popMatrix();
   }
