@@ -27,12 +27,17 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 // GLOBAL FONTS //
 
 // GLOBAL OBJECTS //
+Screen introScreen, instructionScreen, levelSelectorScreen,
+       gameOverScreen, winnerScreen;
+
 Ant ant;
 
 // GLOBAL BOOLEANS //
 boolean keyLeft, keyRight, keyUp, keyDown;
 
 // GLOBAL ARRAYLISTS //
+ArrayList <PowerUps> goodFruit = new ArrayList();
+float numFruits = 5;
 
 // GLOBAL COLORS //
 
@@ -51,6 +56,7 @@ void setup() {
   frameRate(60);
   smooth();
   surface.setTitle("Antlion Game");
+  gameState = 3; // temporarily init state to adjust where to start
   initObjects();
 }
 
@@ -59,7 +65,11 @@ void setup() {
  *
  */
 void initObjects() {
-  ant = new Ant(new PVector(500, 500), new PVector (100, 100));
+  ant = new Ant(new PVector(500, 500), new PVector (30, 30));
+
+  for (int i = 0; i < numFruits; i++) {
+    goodFruit.add(new PowerUps(new PVector(random(width), random(height))));
+  }
 }
 
 /**
@@ -74,27 +84,32 @@ void draw() {
 
 void controlGameState() {
   switch(gameState) {
-    case INTRO:
+    case INTRO: // gameState = 0;
       // render intro stuff
       break;
-    case INSTRUCTIONS:
+    case INSTRUCTIONS: // gameState = 1;
       // render instructions screen
       break;
-    case LVL_SELECTOR:
+    case LVL_SELECTOR: // gameState = 2;
       // render level selector screen
-    case LVL_1:
+    case LVL_1: // gameState = 3;
       // render level 1 screen
+      for (int i = 0; i < goodFruit.size(); i++) {
+        PowerUps p = goodFruit.get(i);
+        p.render();
+        p.acquire();
+      }
       break;
-    case LVL_2:
+    case LVL_2: // gameState = 4;
       // render level 2 screen
       break;
-    case LVL_3:
+    case LVL_3: // gameState = 5;
       // render level 3 screen
       break;
-    case GAME_OVER:
+    case GAME_OVER: // gameState = 6;
       // render game over screen
       break;
-    case WIN_SCREEN:
+    case WIN_SCREEN: // gameState = 7;
       // render winner screen
       break;
   }
