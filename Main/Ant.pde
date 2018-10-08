@@ -1,7 +1,8 @@
 class Ant extends Character {
   // FIELDS //
-  float health;
-  float acc = 3;
+  boolean isMoving;
+  float energy;
+  float acc = 4;
   float angle;
   PVector upAcc = new PVector(0, -acc);
   PVector downAcc = new PVector(0, acc);
@@ -12,13 +13,21 @@ class Ant extends Character {
   // CONSTRUCTOR //
   Ant(PVector pos, PVector size) {
     super(pos, size);
-    health = 100;
+    energy = 100;
+    isMoving = false;
     avatar = loadImage("avatar.png");
   }
 
-  void decrementHealth(int damage) {
-    health -= damage;
+  void decrementEnergy(float damage) {
+    energy -= damage;
+    dampener = 0.2;
   }
+
+  void increaseEnergy(float boost) {
+    energy += boost;
+    dampener = boost;
+  }
+
 
   void render() {
     pushMatrix();
@@ -34,6 +43,34 @@ class Ant extends Character {
   void update() {
     super.update();
     antMovement();
+    println(dampener);
+    println("Movement: " + isMoving);
+    if (keyRight || keyLeft || keyUp || keyDown) {
+      isMoving = true;
+      dampener -= 0.002;
+    } else {
+      isMoving = false;
+    }
+
+    if (dampener <= 0.1) {
+      dampener = 0.1;
+    }
+
+    if (dampener >= 0.8) {
+      dampener = 0.8;
+    }
+
+    // if (vel.x > 0 || vel.y > 0) {
+    //   isMoving = true;
+    // } else if (vel.x <= 0 || vel.y <= 0) {
+    //   isMoving = false;
+    // }
+
+    if (keyPressed && key == 't') {
+      dampener = 0.3;
+    } else if (keyPressed && key == 'r') {
+      dampener = 0.8;
+    }
   }
 
   void antMovement() {

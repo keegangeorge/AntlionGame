@@ -1,0 +1,15 @@
+class Hud {
+  // FIELDS //
+
+  // METHODS //
+  void render() {
+    pushMatrix();
+    pushStyle();
+    fill(#f4b503);
+    rect(697, 590, 564, 111);
+    
+    popStyle();
+    popMatrix();
+  }
+
+} // class end

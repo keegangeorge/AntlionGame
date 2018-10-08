@@ -59,8 +59,6 @@ class Character {
         // hit top edge
         // win level!
       }
-
-
   }
 
   void update() {

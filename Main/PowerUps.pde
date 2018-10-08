@@ -2,17 +2,20 @@ class PowerUps {
   // FIELDS //
   PVector pos;
   PVector size;
+  color col;
 
   PowerUps(PVector pos) {
     this.pos = pos;
     size = new PVector(50, 50);
+    col = color(0, 255, 0);
+
   }
 
   void render() {
     pushMatrix();
     pushStyle();
     translate(pos.x,pos.y);
-    fill(0, 255, 0);
+    fill(col);
     strokeWeight(5);
     stroke(0);
     ellipse(0, 0, size.x, size.y);
@@ -20,13 +23,29 @@ class PowerUps {
     popMatrix();
   }
 
-  void acquire() {
+  void acquire(ArrayList fruit) {
     if (abs(ant.pos.x - pos.x) < ant.size.x / 2 + size.x / 2 &&
     abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
-      goodFruit.remove(this);
+      fruit.remove(this);
       // also handle energy here
+      acquireAction();
     }
+  }
+
+  void acquireAction() {
+    ant.increaseEnergy(0.8);
   }
 
 
 } // class end
+
+
+/*
+ * fruit good = permanent tiny speed boost (speed related to energy)
+ * bad fruit = decrease energy & speed 10%
+ * barriers = 5 decrease energy
+ * 1% decrease for movement
+ *
+ *
+ *
+*/
