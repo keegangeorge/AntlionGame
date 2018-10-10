@@ -3,23 +3,31 @@ class PowerUps {
   PVector pos;
   PVector size;
   color col;
+  PImage fruit;
 
   PowerUps(PVector pos) {
     this.pos = pos;
     size = new PVector(50, 50);
     col = color(0, 255, 0);
+    fruit = loadImage("good-fruit.png");
 
   }
 
   void render() {
+    // pushMatrix();
+    // pushStyle();
+    // translate(pos.x,pos.y);
+    // fill(col);
+    // strokeWeight(5);
+    // stroke(0);
+    // ellipse(0, 0, size.x, size.y);
+    // popStyle();
+    // popMatrix();
     pushMatrix();
-    pushStyle();
-    translate(pos.x,pos.y);
-    fill(col);
-    strokeWeight(5);
-    stroke(0);
-    ellipse(0, 0, size.x, size.y);
-    popStyle();
+    translate(pos.x, pos.y);
+    imageMode(CENTER);
+    image(fruit, 0, 0);
+    imageMode(CORNER);
     popMatrix();
   }
 

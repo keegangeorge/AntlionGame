@@ -5,6 +5,7 @@ class PowerDepletion extends PowerUps {
     super(pos);
     size = new PVector (50, 50);
     col = color(255, 0, 0);
+    fruit = loadImage("bad-fruit.png");
   }
 
   void render() {
