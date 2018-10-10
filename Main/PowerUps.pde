@@ -4,25 +4,19 @@ class PowerUps {
   PVector size;
   color col;
   PImage fruit;
+  int latestRecordedTime;
+  int timeInterval;
 
   PowerUps(PVector pos) {
     this.pos = pos;
     size = new PVector(50, 50);
     col = color(0, 255, 0);
     fruit = loadImage("good-fruit.png");
-
+    timeInterval = 1000;
+    latestRecordedTime = millis();
   }
 
   void render() {
-    // pushMatrix();
-    // pushStyle();
-    // translate(pos.x,pos.y);
-    // fill(col);
-    // strokeWeight(5);
-    // stroke(0);
-    // ellipse(0, 0, size.x, size.y);
-    // popStyle();
-    // popMatrix();
     pushMatrix();
     translate(pos.x, pos.y);
     imageMode(CENTER);
@@ -33,9 +27,16 @@ class PowerUps {
 
   void acquire(ArrayList fruit) {
     if (abs(ant.pos.x - pos.x) < ant.size.x / 2 + size.x / 2 &&
-    abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
+      abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
       fruit.remove(this);
+
+      if (millis() > latestRecordedTime + timeInterval) {
+        latestRecordedTime = millis();
+        ant.goodFruitAcquired = true;
+      }
+
       // also handle energy here
+
       acquireAction();
     }
   }
@@ -43,10 +44,7 @@ class PowerUps {
   void acquireAction() {
     ant.increaseEnergy(0.8);
   }
-
-
 } // class end
-
 
 /*
  * fruit good = permanent tiny speed boost (speed related to energy)
@@ -56,4 +54,4 @@ class PowerUps {
  *
  *
  *
-*/
+ */

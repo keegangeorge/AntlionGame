@@ -13,6 +13,16 @@ class PowerDepletion extends PowerUps {
   }
 
 
+  @Override
+  void acquire(ArrayList fruit) {
+    if (abs(ant.pos.x - pos.x) < ant.size.x / 2 + size.x / 2 &&
+      abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
+      fruit.remove(this);
+      ant.badFruitAcquired = true;
+      acquireAction();
+    }
+  }
+
   void acquireAction() {
     ant.decrementEnergy(0.5);
   }
