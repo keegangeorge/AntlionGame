@@ -20,7 +20,11 @@ class Ant extends Character {
 
   void decrementEnergy(float damage) {
     energy -= damage;
-    dampener = 0.2;
+    if (dampener >= 0.5) {
+      dampener = 0.5;
+    } else if (dampener <= 0.5) {
+      dampener = 0.2;
+    }
   }
 
   void increaseEnergy(float boost) {
@@ -32,11 +36,11 @@ class Ant extends Character {
   void render() {
     pushMatrix();
     translate(pos.x, pos.y);
+    fill(255, 0, 0);
+    rect(-size.x / 2, -size.x / 2, size.x, size.y);
     // TODO fix flipped angle causing arrow key incorrect direction
     // rotate(radians(angle));
-    imageMode(CENTER);
-    image(avatar, 0, 0);
-    imageMode(CORNER);
+    image(avatar, -size.x / 2, -size.x / 2, size.x, size.y);
     popMatrix();
   }
 

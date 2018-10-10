@@ -4,7 +4,7 @@
  * @version 1.0 (2019-10-04)
  */
 
- // IMPORT LIBRARIES //
+// IMPORT LIBRARIES //
 import controlP5.*;
 
 // GAME STATES //
@@ -28,8 +28,8 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 
 // GLOBAL OBJECTS //
 float cameraX, cameraY;
-Screen introScreen, instructionScreen, levelSelectorScreen,
-       gameOverScreen, winnerScreen;
+Screen introScreen, instructionScreen, levelSelectorScreen, 
+  gameOverScreen, winnerScreen;
 Hud headsUpDisplay;
 
 Ant ant;
@@ -41,7 +41,9 @@ boolean keyLeft, keyRight, keyUp, keyDown;
 // GLOBAL ARRAYLISTS //
 ArrayList <PowerUps> goodFruit = new ArrayList();
 ArrayList <PowerDepletion> badFruit = new ArrayList();
+ArrayList <Barrier> barrier = new ArrayList();
 float numFruits = 5;
+float numBarrier = 5;
 
 // GLOBAL COLORS //
 
@@ -69,7 +71,7 @@ void setup() {
  *
  */
 void initObjects() {
-  ant = new Ant(new PVector(500, 500), new PVector (30, 30));
+  ant = new Ant(new PVector(500, 500), new PVector (64, 64));
   // antlion = new Antlion(new PVector(random(width), random(height)), new PVector(30, 30));
   antlion = new Antlion(new PVector(ant.pos.x -100, ant.pos.y - 100), new PVector(30, 30));
   headsUpDisplay = new Hud();
@@ -80,6 +82,10 @@ void initObjects() {
 
   for (int i = 0; i < numFruits; i++) {
     badFruit.add(new PowerDepletion(new PVector(random(width), random(height))));
+  }
+
+  for (int i = 0; i < numBarrier; i++) {
+    barrier.add(new Barrier(new PVector(random(width), random(height)), new PVector(random(200, 300), 50)));
   }
 }
 
@@ -100,49 +106,51 @@ void draw() {
   popMatrix();
 
   headsUpDisplay.render();
-
-
-
 }
 
 void controlGameState() {
   switch(gameState) {
-    case INTRO: // gameState = 0;
-      // render intro stuff
-      break;
-    case INSTRUCTIONS: // gameState = 1;
-      // render instructions screen
-      break;
-    case LVL_SELECTOR: // gameState = 2;
-      // render level selector screen
-    case LVL_1: // gameState = 3;
-      // render level 1 screen
-      for (int i = 0; i < goodFruit.size(); i++) {
-        PowerUps pu = goodFruit.get(i);
-        pu.render();
-        pu.acquire(goodFruit);
-      }
+  case INTRO: // gameState = 0;
+    // render intro stuff
+    break;
+  case INSTRUCTIONS: // gameState = 1;
+    // render instructions screen
+    break;
+  case LVL_SELECTOR: // gameState = 2;
+    // render level selector screen
+  case LVL_1: // gameState = 3;
+    // render level 1 screen
+    for (int i = 0; i < goodFruit.size(); i++) {
+      PowerUps pu = goodFruit.get(i);
+      pu.render();
+      pu.acquire(goodFruit);
+    }
 
-      for (int i = 0; i < badFruit.size(); i++) {
-        PowerDepletion pd = badFruit.get(i);
-        pd.render();
-        pd.acquire(badFruit);
-      }
-      break;
-    case LVL_2: // gameState = 4;
-      // render level 2 screen
-      break;
-    case LVL_3: // gameState = 5;
-      // render level 3 screen
-      break;
-    case GAME_OVER: // gameState = 6;
-      // render game over screen
-      break;
-    case WIN_SCREEN: // gameState = 7;
-      // render winner screen
-      break;
+    for (int i = 0; i < badFruit.size(); i++) {
+      PowerDepletion pd = badFruit.get(i);
+      pd.render();
+      pd.acquire(badFruit);
+    }
+
+    for (int i = 0; i < barrier.size(); i++) {
+      Barrier b = barrier.get(i);
+      b.render();
+      b.acquire(barrier);
+    }
+    break;
+  case LVL_2: // gameState = 4;
+    // render level 2 screen
+    break;
+  case LVL_3: // gameState = 5;
+    // render level 3 screen
+    break;
+  case GAME_OVER: // gameState = 6;
+    // render game over screen
+    break;
+  case WIN_SCREEN: // gameState = 7;
+    // render winner screen
+    break;
   }
-
 }
 
 void keyPressed() {
