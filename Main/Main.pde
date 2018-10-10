@@ -28,7 +28,7 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 
 // GLOBAL OBJECTS //
 float cameraX, cameraY;
-Screen introScreen, instructionScreen, levelSelectorScreen, 
+Screen introScreen, instructionScreen, levelSelectorScreen,
   gameOverScreen, winnerScreen;
 Hud headsUpDisplay;
 
@@ -71,9 +71,6 @@ void setup() {
  *
  */
 void initObjects() {
-  ant = new Ant(new PVector(500, 500), new PVector (64, 64));
-  // antlion = new Antlion(new PVector(random(width), random(height)), new PVector(30, 30));
-  antlion = new Antlion(new PVector(ant.pos.x -100, ant.pos.y - 100), new PVector(30, 30));
   headsUpDisplay = new Hud();
 
   for (int i = 0; i < numFruits; i++) {
@@ -87,6 +84,10 @@ void initObjects() {
   for (int i = 0; i < numBarrier; i++) {
     barrier.add(new Barrier(new PVector(random(width), random(height)), new PVector(random(200, 300), 50)));
   }
+
+  ant = new Ant(new PVector(height, width / 2), new PVector (74, 128));
+  antlion = new Antlion(new PVector(random(width), random(height)), new PVector(400, 349));
+
 }
 
 /**
@@ -97,12 +98,12 @@ void draw() {
   background(255);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   cameraX = -ant.pos.x + width / 2;
-  cameraY = -ant.pos.y + width / 2;
+  cameraY = (-ant.pos.y - 12) + width / 2;
   pushMatrix();
   translate(cameraX, cameraY);
   ant.update();
-  antlion.update();
   controlGameState();
+  antlion.update();
   popMatrix();
 
   headsUpDisplay.render();
