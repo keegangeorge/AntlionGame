@@ -1,19 +1,21 @@
 class Antlion extends Character {
   // FIELDS //
   PImage npc;
-  PVector acc = new PVector(random(1, 4), random(0));
+  float angle;
+  PVector acc = new PVector(random(0.5, 1), random(-1, 1));
   // CONSTRUCTOR //
   Antlion(PVector pos, PVector size) {
     super(pos, size);
-    npc = loadImage("avatar.png");
+    npc = loadImage("antlion.png");
   }
 
   // METHODS //
   void render() {
     pushMatrix();
     translate(pos.x, pos.y);
+    // rotate(radians(angle));
     imageMode(CENTER);
-    image(npc, 0, 0);
+    image(npc, 0, 0, size.x, size.y);
     imageMode(CORNER);
     popMatrix();
   }
@@ -21,9 +23,8 @@ class Antlion extends Character {
   @Override
   void update() {
     super.update();
-    // accelerate(acc);
-    println(vel.x + " X VEL");
-    println(vel.y + " Y VEL");
+    accelerate(acc);
+    // angle += random(-3, 3);
   }
 
   // @Override
@@ -41,26 +42,26 @@ class Antlion extends Character {
 
   @Override
   void detectBoundaries() {
-      // add boundary detection
-      if (pos.x > (width - size.x / 2)) {
-        // hit right edge
-        pos.x = width - size.x / 2;
-      }
-
-      if (pos.x < (0 + size.x / 2)) {
-        // hit left edge
-        pos.x = 0 + size.x / 2;
-      }
-
-      if (pos.y > (height - size.y / 2)) {
-        // hit bottom edge
-        pos.y = height - size.y / 2;
-      }
-
-      if (pos.y < (0 + size.y / 2)) {
-        // hit top edge
-        // win level!
-      }
+      // // add boundary detection
+      // if (pos.x > (width - size.x / 2)) {
+      //   // hit right edge
+      //   pos.x = width - size.x / 2;
+      // }
+      //
+      // if (pos.x < (0 + size.x / 2)) {
+      //   // hit left edge
+      //   pos.x = 0 + size.x / 2;
+      // }
+      //
+      // if (pos.y > (height - size.y / 2)) {
+      //   // hit bottom edge
+      //   pos.y = height - size.y / 2;
+      // }
+      //
+      // if (pos.y < (0 + size.y / 2)) {
+      //   // hit top edge
+      //   // win level!
+      // }
   }
 
 }
