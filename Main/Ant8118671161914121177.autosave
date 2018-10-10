@@ -8,9 +8,8 @@ class Ant extends Character {
   PVector downAcc = new PVector(0, acc);
   PVector leftAcc = new PVector(-acc, 0);
   PVector rightAcc = new PVector(acc, 0);
-  PImage avatarLeft, avatarRegular, avatarRight;
-  PImage avatarPowerUp, avatarPowerDeplete;
-  boolean goodFruitAcquired, badFruitAcquired;
+  PImage avatarLeft;
+  PImage avatarRight;
 
   // CONSTRUCTOR //
   Ant(PVector pos, PVector size) {
@@ -19,11 +18,6 @@ class Ant extends Character {
     isMoving = false;
     avatarLeft = loadImage("ant-left-regular.png");
     avatarRight = loadImage("ant-right-regular.png");
-    avatarRegular = loadImage("ant-regular.png");
-    avatarPowerUp = loadImage("ant-powerup.png");
-    avatarPowerDeplete = loadImage("ant-powerdeplete.png");
-    goodFruitAcquired = false;
-    badFruitAcquired = false;
   }
 
   void decrementEnergy(float damage) {
@@ -42,34 +36,28 @@ class Ant extends Character {
 
 
   void render() {
-    println("Fruit: " + badFruitAcquired);
     pushMatrix();
     translate(pos.x, pos.y);
     fill(255, 0, 0);
+    // rect(-size.x / 2, -size.x / 2, size.x, size.y);
+    // TODO fix flipped angle causing arrow key incorrect direction
+    // rotate(radians(angle));
     if (keyPressed && keyCode == RIGHT || keyPressed && key == 'd' || keyPressed && key == 'D') {
       image(avatarRight, -size.x / 2, -size.x / 2, size.x, size.y);
     } else if (keyPressed && keyCode == LEFT || keyPressed && key == 'a' || keyPressed && key == 'A') {
       image(avatarLeft, -size.x / 2, -size.x / 2, size.x, size.y);
-    } else if (goodFruitAcquired == true) {
-      image(avatarPowerUp, -size.x / 2, -size.x / 2, size.x, size.y);
-    } else if (goodFruitAcquired == false) {
-      image(avatarRegular, -size.x / 2, -size.x / 2, size.x, size.y);
-    } else if (badFruitAcquired == true) {
-      image(avatarPowerDeplete, -size.x / 2, -size.x / 2, size.x, size.y);
-    } else if (badFruitAcquired == false) {
-      image(avatarRegular, -size.x / 2, -size.x / 2, size.x, size.y);
     } else {
-      image(avatarRegular, -size.x / 2, -size.x / 2, size.x, size.y);
+      image(avatarLeft, -size.x / 2, -size.x / 2, size.x, size.y);
     }
+
     popMatrix();
   }
-
 
   void update() {
     super.update();
     antMovement();
     println(dampener);
-    //println("Movement: " + isMoving);
+    println("Movement: " + isMoving);
     if (keyRight || keyLeft || keyUp || keyDown) {
       isMoving = true;
       dampener -= 0.002;
@@ -107,11 +95,7 @@ class Ant extends Character {
       accelerate(leftAcc);
       angle -= 5;
     }
-    if (keyUp) {
-      accelerate(upAcc);
-      goodFruitAcquired = false;
-      badFruitAcquired = false;
-    }
+    if (keyUp) accelerate(upAcc);
     if (keyDown) accelerate(downAcc);
   }
 }
