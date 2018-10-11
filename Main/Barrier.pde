@@ -31,10 +31,10 @@ class Barrier {
       ant.vel.y *= -2;
     }
   }
-  
+
   boolean overlap(Barrier other) {
     if (abs(pos.x - other.pos.x) < size.x / 2 + other.size.x / 2 &&
-    abs(pos.y - other.pos.y) < size.y / 2 + other.size.y / 2) {
+      abs(pos.y - other.pos.y) < size.y / 2 + other.size.y / 2) {
       return true;
     }
     return false;

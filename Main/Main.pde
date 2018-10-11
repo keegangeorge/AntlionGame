@@ -28,12 +28,12 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 
 // GLOBAL OBJECTS //
 float cameraX, cameraY;
-Screen introScreen, instructionScreen, levelSelectorScreen,
+Screen introScreen, instructionScreen, levelSelectorScreen, 
   gameOverScreen, winnerScreen;
 Hud headsUpDisplay;
 
 Ant ant;
-Antlion antlion;
+// Antlion antlion;
 
 // GLOBAL BOOLEANS //
 boolean keyLeft, keyRight, keyUp, keyDown;
@@ -42,8 +42,10 @@ boolean keyLeft, keyRight, keyUp, keyDown;
 ArrayList <PowerUps> goodFruit = new ArrayList();
 ArrayList <PowerDepletion> badFruit = new ArrayList();
 ArrayList <Barrier> barrier = new ArrayList();
+ArrayList <Antlion> antlion = new ArrayList();
 float numFruits = 5;
 float numBarrier = 5;
+float numAntlion = 1;
 
 // GLOBAL COLORS //
 
@@ -74,20 +76,25 @@ void initObjects() {
   headsUpDisplay = new Hud();
 
   for (int i = 0; i < numFruits; i++) {
-    goodFruit.add(new PowerUps(new PVector(random(width), random(height))));
+    goodFruit.add(new PowerUps(new PVector(random(width), random(-720, height))));
   }
 
   for (int i = 0; i < numFruits; i++) {
-    badFruit.add(new PowerDepletion(new PVector(random(width), random(height))));
+    badFruit.add(new PowerDepletion(new PVector(random(width), random(-720, height))));
   }
 
   for (int i = 0; i < numBarrier; i++) {
-    barrier.add(new Barrier(new PVector(random(width), random(height)), new PVector(random(200, 300), 50)));
+    barrier.add(new Barrier(new PVector(random(width), random(-720, height / 2)), new PVector(random(200, 300), 50)));
   }
 
   ant = new Ant(new PVector(height, width / 2), new PVector (74, 128));
-  antlion = new Antlion(new PVector(random(width), random(height)), new PVector(400, 349));
 
+  for (int i = 0; i < numAntlion; i++) {
+    //antlion.add(new Antlion(new PVector(random(width), random(height), new PVector(400, 349))));
+    antlion.add(new Antlion(new PVector(random(width), random(height)), new PVector(200, 175)));
+  }
+
+  // antlion = new Antlion(new PVector(random(width), random(height)), new PVector(400, 349));
 }
 
 /**
@@ -95,15 +102,16 @@ void initObjects() {
  *
  */
 void draw() {
+  println(ant.pos.y);
   background(255);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   cameraX = -ant.pos.x + width / 2;
   cameraY = (-ant.pos.y - 12) + width / 2;
   pushMatrix();
-  translate(cameraX, cameraY);
+  translate(0, cameraY);
   ant.update();
   controlGameState();
-  antlion.update();
+  // antlion.update();
   popMatrix();
 
   headsUpDisplay.render();
@@ -135,8 +143,24 @@ void controlGameState() {
 
     for (int i = 0; i < barrier.size(); i++) {
       Barrier b = barrier.get(i);
-      b.render();
-      b.acquire(barrier);
+      if (b.overlap(b) == true) {
+        barrier.remove(this);
+        //barrier.clear();
+        println("there are overlapping barriers");
+        //barrier.add(new Barrier(new PVector(random(width), random(-720, height / 2)), new PVector(random(200, 300), 50)));
+        b.render();
+        b.acquire(barrier);
+      } else {
+        b.render();
+        b.acquire(barrier);
+      }
+
+      //b.render();
+      //b.acquire(barrier);
+    }
+
+    for (int i = 0; i < antlion.size(); i++) {
+      antlion.get(i).update();
     }
     break;
   case LVL_2: // gameState = 4;

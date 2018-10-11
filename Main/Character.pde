@@ -25,7 +25,7 @@ class Character {
   void render() {
     pushMatrix();
     fill(mainColor);
-    translate(pos.x,pos.y);
+    translate(pos.x, pos.y);
     rect(0, 0, size.x, size.y);
     popMatrix();
   }
@@ -49,26 +49,26 @@ class Character {
 
 
   void detectBoundaries() {
-      // add boundary detection
-      if (pos.x > (width - size.x / 2)) {
-        // hit right edge
-        pos.x = width - size.x / 2;
-      }
+    // add boundary detection
+    if (pos.x > (width - size.x / 2)) {
+      // hit right edge
+      pos.x = width - size.x / 2;
+    }
 
-      if (pos.x < (0 + size.x / 2)) {
-        // hit left edge
-        pos.x = 0 + size.x / 2;
-      }
+    if (pos.x < (0 + size.x / 2)) {
+      // hit left edge
+      pos.x = 0 + size.x / 2;
+    }
 
-      if (pos.y > (height - size.y / 2)) {
-        // hit bottom edge
-        pos.y = height - size.y / 2;
-      }
+    if (pos.y > (height - size.y / 2)) {
+      // hit bottom edge
+      pos.y = height - size.y / 2;
+    }
 
-      if (pos.y < (0 + size.y / 2)) {
-        // hit top edge
-        // win level!
-      }
+    if (pos.y < (0 + size.y / 2)) {
+      // hit top edge
+      // win level!
+    }
   }
 
   void update() {

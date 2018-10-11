@@ -11,6 +11,4 @@ class Screen {
     background(255);
     // image(bgImg, 0, 0)
   }
-
-
 }
