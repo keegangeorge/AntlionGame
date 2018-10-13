@@ -5,18 +5,18 @@
  */
 
 // IMPORT LIBRARIES //
-import controlP5.*;
 
 // GAME STATES //
 int gameState;
 final int INTRO = 0;
-final int INSTRUCTIONS = 1;
+final int RULES = 1;
 final int LVL_SELECTOR = 2;
 final int LVL_1 = 3;
 final int LVL_2 = 4;
 final int LVL_3 = 5;
 final int GAME_OVER = 6;
 final int WIN_SCREEN = 7;
+PImage bg;
 
 // LEVEL BOUNDARIES //
 final float SCREEN_MIN = 720; // Player Y-COORD Minimum
@@ -28,7 +28,7 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 
 // GLOBAL OBJECTS //
 float cameraX, cameraY;
-Screen introScreen, instructionScreen, levelSelectorScreen, 
+Screen introScreen, instructionScreen, levelSelectorScreen,
   gameOverScreen, winnerScreen;
 Hud headsUpDisplay;
 
@@ -52,7 +52,52 @@ float numAntlion = 1;
 // AUDIO //
 
 // GUI //
-ControlP5 cp5;
+Button btnLevelOne, btnLevelTwo, btnLevelThree;
+Button btnRules, btnBack;
+PImage btnLevelOneReg, btnLevelOneHover;
+PImage btnLevelTwoReg, btnLevelTwoHover;
+PImage btnLevelThreeReg, btnLevelThreeHover;
+PImage btnRulesReg, btnRulesHover;
+PImage btnBackReg, btnBackHover;
+
+void initButtons() {
+  // Level 1 Button //
+  btnLevelOneReg = loadImage("buttons/btn-level1.png");
+  btnLevelOneHover = loadImage("buttons/btn-level1-hover.png");
+  btnLevelOne = new Button(new PVector(width / 2, height / 2), btnLevelOneReg, btnLevelOneHover);
+  // Level 2 Button //
+  btnLevelTwoReg = loadImage("buttons/btn-level2.png");
+  btnLevelTwoHover = loadImage("buttons/btn-level2-hover.png");
+  btnLevelTwo = new Button(new PVector(width / 2, height / 2), btnLevelTwoReg, btnLevelTwoHover);
+  // Level 3 Button //
+  btnLevelThreeReg = loadImage("buttons/btn-level1.png");
+  btnLevelThreeHover = loadImage("buttons/btn-level1-hover.png");
+  btnLevelThree = new Button(new PVector(width / 2, height / 2), btnLevelThreeReg, btnLevelThreeHover);
+  // Rules Button //
+  btnRulesReg = loadImage("buttons/btn-level1.png");
+  btnRulesHover = loadImage("buttons/btn-level1-hover.png");
+  btnRules = new Button(new PVector(width / 2, height / 2), btnRulesReg, btnRulesHover);
+  // Back Button //
+  btnBackReg = loadImage("buttons/btn-level1.png");
+  btnBackHover = loadImage("buttons/btn-level1-hover.png");
+  btnBack = new Button(new PVector(width / 2, height / 2), btnBackReg, btnBackHover);
+
+}
+
+void buttonActions() {
+  // LEVEL BUTTONS //
+  btnLevelOne.action(LVL_1);
+  btnLevelTwo.action(LVL_1);
+  btnLevelThree.action(LVL_1);
+
+  // ACTION BUTTONS //
+  btnBack.action(INTRO);
+  btnRules.action(RULES);
+
+
+}
+
+
 
 
 /**
@@ -61,11 +106,13 @@ ControlP5 cp5;
  */
 void setup() {
   size(1280, 720);
-  frameRate(60);
+  frameRate(120);
   smooth();
   surface.setTitle("Antlion Game");
   gameState = 3; // temporarily init state to adjust where to start
   initObjects();
+  bg = requestImage("bg1.jpg");
+  initButtons();
 }
 
 /**
@@ -98,21 +145,28 @@ void initObjects() {
 }
 
 /**
- * Draw method
+ * Draw metho
  *
  */
 void draw() {
-  println(ant.pos.y);
+  buttonActions();
   background(255);
+  println(ant.pos.y);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   cameraX = -ant.pos.x + width / 2;
   cameraY = (-ant.pos.y - 12) + width / 2;
   pushMatrix();
+  image(bg, 0, -1280);
+
   translate(0, cameraY);
+
+
   ant.update();
   controlGameState();
   // antlion.update();
   popMatrix();
+  btnLevelOne.update();
+
 
   headsUpDisplay.render();
 }
@@ -122,7 +176,7 @@ void controlGameState() {
   case INTRO: // gameState = 0;
     // render intro stuff
     break;
-  case INSTRUCTIONS: // gameState = 1;
+  case RULES: // gameState = 1;
     // render instructions screen
     break;
   case LVL_SELECTOR: // gameState = 2;
@@ -171,6 +225,7 @@ void controlGameState() {
     break;
   case GAME_OVER: // gameState = 6;
     // render game over screen
+    background(150, 0, 0);
     break;
   case WIN_SCREEN: // gameState = 7;
     // render winner screen
