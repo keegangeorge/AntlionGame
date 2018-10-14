@@ -42,7 +42,7 @@ class Ant extends Character {
 
 
   void render() {
-    println("Fruit: " + badFruitAcquired);
+    //println("Fruit: " + badFruitAcquired);
     pushMatrix();
     translate(pos.x, pos.y);
     fill(255, 0, 0);
@@ -68,7 +68,7 @@ class Ant extends Character {
   void update() {
     super.update();
     antMovement();
-    println(dampener);
+    //println(dampener);
     //println("Movement: " + isMoving);
     if (keyRight || keyLeft || keyUp || keyDown) {
       isMoving = true;

@@ -16,7 +16,7 @@ class Button {
 
   Button(PVector pos, PVector size, PImage btnRegular, PImage btnHover) {
     this.pos = pos;
-    this.size = size;
+    this.size = size; // small is 187x108
     this.btnRegular = btnRegular;
     this.btnHover = btnHover;
     btnState = false;
