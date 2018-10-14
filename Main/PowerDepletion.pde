@@ -19,6 +19,8 @@ class PowerDepletion extends PowerUps {
       abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
       fruit.remove(this);
       ant.badFruitAcquired = true;
+      appleSound.play();
+      appleSound.rewind();
       acquireAction();
     }
   }
@@ -26,4 +28,4 @@ class PowerDepletion extends PowerUps {
   void acquireAction() {
     ant.decrementEnergy(0.5);
   }
-}
+} // class end

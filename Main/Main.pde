@@ -1,10 +1,16 @@
 /**
  * IAT 312 Antlion Game
  * @author Keegan George
- * @version 1.0 (2019-10-04)
+ * @version 1.0 (Init: 2019-10-04)
  */
 
 // IMPORT LIBRARIES //
+import ddf.minim.*;
+
+// AUDIO //
+Minim minim;
+AudioPlayer appleSound;
+AudioPlayer menuSound;
 
 // GAME STATES //
 int gameState;
@@ -18,9 +24,9 @@ final int GAME_OVER = 6;
 final int WIN_SCREEN = 7;
 
 // SCREEN BACKGROUNDS //
-PImage bg; // delete?
+PImage bgLevelOne, bgLevelTwo, bgLevelThree;
 PImage bgStart, bgLevel, bgRules;
-PImage bgWin, bgLose;
+PImage bgWin, bgLose, bgExtraLife;
 
 // LEVEL BOUNDARIES //
 final float SCREEN_MIN = 720; // Player Y-COORD Minimum
@@ -28,11 +34,13 @@ final float SCREEN_MAX = 0; // Player Y-COORD Maxmimum
 
 // GLOBAL VARIABLES //
 PImage icon;
+PImage cursorSelect, cursorPointer;
 float cameraX, cameraY;
 boolean keyLeft, keyRight, keyUp, keyDown;
 PImage styleStick, styleRockOne, styleRockTwo;
 PVector styleStickSize, styleRockOneSize, styleRockTwoSize;
 boolean performOperations;
+boolean hovering;
 
 
 // GLOBAL OBJECTS //
@@ -98,25 +106,16 @@ void loadScreenBackgrounds() {
   bgLevel = requestImage("screens/level-screen.png");
   bgWin = requestImage("screens/win-screen.png");
   bgLose = requestImage("screens/lose-screen.png");
-  bg = requestImage("bg1.jpg");
-  // bgLevelOne = requestImage()
-  // bgLevelTwo = requestImage()
-  // bgLevelThree = requestImage()
+  bgLevelOne = requestImage("screens/level-one.jpg");
+  bgLevelTwo = requestImage("screens/level-two.jpg");
+  bgLevelThree = requestImage("screens/level-three.jpg");
+  bgExtraLife = loadImage("screens/extra-life.png");
 }
 
-void setup() {
-  size(1280, 720);
-  frameRate(60);
-  smooth();
-  icon = loadImage("icon.png");
-  surface.setIcon(icon);
-  surface.setTitle("Antlion Game");
-  gameState = 0; // temporarily init state to adjust where to start
-  loadScreenBackgrounds();
-  initButtons();
-  initBarrierInfo();
-  initObjects();
-  performOperations = false;
+void initSounds() {
+  minim = new Minim(this);
+  appleSound = minim.loadFile("audio/appleBite.mp3");
+  menuSound = minim.loadFile("audio/menuSound.mp3");
 }
 
 void initBarrierInfo() {
@@ -147,15 +146,31 @@ void initObjects() {
   }
   // Ant //
   ant = new Ant(new PVector(height, width / 2), new PVector (74, 128));
-  // Antlion //
-  // for (int i = 0; i < numAntlion; i++) {
-  //   antlion.add(new Antlion(new PVector(random(width), random(height)), new PVector(200, 175)));
-  // }
   PVector antlionSize = new PVector(200, 175);
   antlion = new Antlion(new PVector(200, height - 100), antlionSize);
 }
 
+void setup() {
+  size(1280, 720);
+  frameRate(60);
+  smooth();
+  icon = loadImage("icons/icon.png");
+  cursorSelect = loadImage("icons/pointer2.png");
+  cursorPointer = loadImage("icons/arrowpointer.png");
+  hovering = false;
+  surface.setIcon(icon);
+  surface.setTitle("Antlion Game");
+  gameState = 0;
+  initSounds();
+  loadScreenBackgrounds();
+  initButtons();
+  initBarrierInfo();
+  initObjects();
+  performOperations = false;
+}
+
 void draw() {
+  noCursor();
   if (antlion.hitCharacter(ant)) {
     if (ant.life == 3) {
       goodFruit.clear();
@@ -163,12 +178,21 @@ void draw() {
       barrier.clear();
       initObjects();
       ant.life = 2;
+      ant.energy = 100;
     } else if (ant.life == 2) {
       goodFruit.clear();
       badFruit.clear();
       barrier.clear();
       initObjects();
       ant.life = 1;
+      ant.energy = 100;
+
+      if (gameState == LVL_1 || gameState == LVL_2 || gameState == LVL_3) {
+        if (goodFruit.size() <= 0) {
+          image(bgExtraLife, 0, 0);
+          ant.life++;
+        }
+      }
     } else if (ant.life == 1) {
       gameState = GAME_OVER;
       goodFruit.clear();
@@ -176,21 +200,18 @@ void draw() {
       barrier.clear();
       initObjects();
       ant.life = 0;
+      ant.energy = 100;
+
+      if (gameState == LVL_1 || gameState == LVL_2 || gameState == LVL_3) {
+        if (goodFruit.size() <= 0) {
+          image(bgExtraLife, 0, 0);
+          ant.life++;
+        }
+      }
     }
   }
 
-  println(ant.pos.y);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
-  println("GAME STATE: " + gameState);
-  println(barrier.size());
-
-  // REMOVE LATER! To test gameStates of win lose
-  if (keyPressed && key == 'o') {
-    gameState = WIN_SCREEN;
-  } else if (keyPressed && key == 'p') {
-    gameState = GAME_OVER;
-  }
-
 
   controlGameState();
 
@@ -209,26 +230,51 @@ void draw() {
   if (gameState == LVL_1 || gameState == LVL_2 || gameState == LVL_3) {
     headsUpDisplay.render();
   }
+
+  if (btnLevelOne.btnState == true || 
+    btnLevelTwo.btnState == true || 
+    btnLevelThree.btnState == true || 
+    btnRules.btnState == true || 
+    btnBack.btnState == true || 
+    btnPlayagain.btnState == true 
+    || btnMenu.btnState == true) {
+    image(cursorSelect, pmouseX, pmouseY, 64, 64);
+  } else if (btnLevelOne.btnState == false ||
+    btnLevelTwo.btnState == false ||
+    btnLevelThree.btnState == false ||
+    btnRules.btnState == false ||
+    btnBack.btnState == false ||
+    btnPlayagain.btnState == false ||
+    btnMenu.btnState == false) {
+    image(cursorPointer, pmouseX, pmouseY, 64, 64);
+  }
 }
 
 void controlGameState() {
   switch(gameState) {
 
+    // START INTRO SCREEN //
   case INTRO: // gameState = 0;
     background(bgStart);
+    menuSound.play();
+    menuSound.rewind();
     if (gameState == INTRO) {
       if (keyPressed && key == ' ') {
         gameState = LVL_SELECTOR;
       }
     }
     break;
+    // END INTRO SCREEN //
 
+    // START RULES SCREEN //
   case RULES: // gameState = 1;
     background(bgRules);
     btnBack.update();
     btnBack.action(LVL_SELECTOR);
     break;
+    // END RULES SCREEN //  
 
+    // START LEVEL SELECTOR SCREEN //
   case LVL_SELECTOR: // gameState = 2;
     background(bgLevel);
     btnLevelOne.update();
@@ -241,12 +287,14 @@ void controlGameState() {
     btnLevelThree.action(LVL_3);
     btnRules.action(RULES);
     break;
+    // END LEVEL SELECTOR SCREEN // 
 
-
-    // render level selector screen
-
+    //////////////////////
+    // START LEVEL ONE //
+    /////////////////////
   case LVL_1: // gameState = 3;
-    background(#8c6f43);
+    background(bgLevelOne);
+
     // Camera Position //
     cameraX = -ant.pos.x + width / 2;
     cameraY = (-ant.pos.y - 150) + width / 2;
@@ -278,6 +326,7 @@ void controlGameState() {
       gameState = LVL_2;
       performOperations = true;
     }
+
     pushMatrix();
     pushStyle();
     translate(0, -1500);
@@ -293,11 +342,14 @@ void controlGameState() {
     popMatrix();
     break;
 
+    //////////////////////
+    // START LEVEL TWO //
+    /////////////////////
   case LVL_2: // gameState = 4;
     if (performOperations == true) {
       initLevelTwo();
     }
-    background(#549949);
+    background(bgLevelTwo);
 
     // Camera Position //
     cameraX = -ant.pos.x + width / 2;
@@ -345,8 +397,12 @@ void controlGameState() {
     popMatrix();
     break;
 
+
+    //////////////////////
+    // START LEVEL THREE //
+    /////////////////////
   case LVL_3: // gameState = 5;
-    background(#386f4b);
+    background(bgLevelThree);
     if (performOperations == true) {
       initLevelTwo();
     }
@@ -394,12 +450,11 @@ void controlGameState() {
     popStyle();
     popMatrix();
     popMatrix();
-
     break;
+
+    // START GAME OVER SCREEN // 
   case GAME_OVER: // gameState = 6;
     image(bgLose, 0, 0);
-
-
     btnPlayagain.update();
     btnMenu.update();
     ant.life = 3;
@@ -407,6 +462,9 @@ void controlGameState() {
     btnMenu.action(LVL_SELECTOR);
     // render game over screen
     break;
+    // END GAME OVER SCREEN //  
+
+    // START WIN SCREEN //  
   case WIN_SCREEN: // gameState = 7;
     image(bgWin, 0, 0);
     btnPlayagain.update();
@@ -416,8 +474,10 @@ void controlGameState() {
     btnMenu.action(LVL_SELECTOR);
     // render winner screen
     break;
+    // END WIN SCREEN //
   }
 }
+
 
 void initLevelTwo() {
   goodFruit.clear();
@@ -436,8 +496,8 @@ void initLevelThree() {
   badFruit.clear();
   barrier.clear();
   numGoodFruits = 5;
-  numBadFruits = 6;
-  numBarrier = 5;
+  numBadFruits = 10;
+  numBarrier = 10;
   antlion.levelVelocity = 10;
   initObjects();
   performOperations = false;
@@ -455,4 +515,4 @@ void keyReleased() {
   if (key == CODED && keyCode == LEFT || key == 'a' || key == 'A') keyLeft = false;
   if (key == CODED && keyCode == UP || key == 'w' || key == 'W') keyUp = false;
   if (key == CODED && keyCode == DOWN || key == 's' || key == 'S') keyDown = false;
-}
+} // class end

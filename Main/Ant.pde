@@ -44,7 +44,6 @@ class Ant extends Character {
 
 
   void render() {
-    //println("Fruit: " + badFruitAcquired);
     pushMatrix();
     translate(pos.x, pos.y);
     fill(255, 0, 0);
@@ -70,8 +69,7 @@ class Ant extends Character {
   void update() {
     super.update();
     antMovement();
-    //println(dampener);
-    //println("Movement: " + isMoving);
+
     if (keyRight || keyLeft || keyUp || keyDown) {
       isMoving = true;
       dampener -= 0.002;
@@ -86,12 +84,6 @@ class Ant extends Character {
     if (dampener >= 0.8) {
       dampener = 0.8;
     }
-
-    // if (vel.x > 0 || vel.y > 0) {
-    //   isMoving = true;
-    // } else if (vel.x <= 0 || vel.y <= 0) {
-    //   isMoving = false;
-    // }
 
     if (keyPressed && key == 't') {
       dampener = 0.3;
@@ -116,4 +108,4 @@ class Ant extends Character {
     }
     if (keyDown) accelerate(downAcc);
   }
-}
+} // class end

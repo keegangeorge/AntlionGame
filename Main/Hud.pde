@@ -32,9 +32,6 @@ class Hud {
     fill(#ff5964);
     rect(0, 0, energyBar, 27, 0);
     fill(255);
-    //textFont(fontHud);
-    //textSize(38);
-    //text(strEnergy, -114, 26);
     image(lifeContainer, -895, -56, 327.5, 116);
     tint(255, lifeOne);
     image(extraLife, -783, -36, 45.875, 59.125);

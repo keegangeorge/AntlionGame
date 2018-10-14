@@ -24,7 +24,6 @@ class Button {
 
   // METHODS //
   void render() {
-    // imageMode(CORNER);
     if (btnState == false) {
       image(btnRegular, pos.x, pos.y, size.x, size.y);
     }
@@ -32,7 +31,6 @@ class Button {
     if (btnState == true) {
       image(btnHover, pos.x, pos.y, size.x, size.y);
     }
-    // imageMode(CENTER);
   }
 
   void hover() {

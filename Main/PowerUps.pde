@@ -28,6 +28,8 @@ class PowerUps {
   void acquire(ArrayList fruit) {
     if (abs(ant.pos.x - pos.x) < ant.size.x / 2 + size.x / 2 &&
       abs(ant.pos.y - pos.y) < ant.size.y / 2 + size.y / 2) {
+      appleSound.play();
+      appleSound.rewind();
       fruit.remove(this);
 
       if (millis() > latestRecordedTime + timeInterval) {
@@ -45,13 +47,3 @@ class PowerUps {
     ant.increaseEnergy(0.8);
   }
 } // class end
-
-/*
- * fruit good = permanent tiny speed boost (speed related to energy)
- * bad fruit = decrease energy & speed 10%
- * barriers = 5 decrease energy
- * 1% decrease for movement
- *
- *
- *
- */

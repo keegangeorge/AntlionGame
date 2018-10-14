@@ -76,4 +76,4 @@ class Character {
     moveCharacter();
     detectBoundaries();
   }
-}
+} // class end

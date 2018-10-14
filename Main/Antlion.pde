@@ -3,10 +3,6 @@ class Antlion extends Character {
   PImage npc;
   float angle;
   float levelVelocity;
-  // PVector acc = new PVector(random(0.5, 1), random(-1, 1));
-  // float acc = 1;
-  // PVector alternateAcc = new PVector(-acc, 0);
-  // PVector defaultAcc = new PVector(acc, 0);
 
   // CONSTRUCTOR //
   Antlion(PVector pos, PVector size) {
@@ -71,4 +67,4 @@ class Antlion extends Character {
       }
     }
   }
-}
+} // class end
