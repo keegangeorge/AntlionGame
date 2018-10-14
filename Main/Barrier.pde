@@ -15,15 +15,6 @@ class Barrier {
 
   // METHODS //
   void render() {
-    // pushMatrix();
-    // pushStyle();
-    // translate(pos.x, pos.y);
-    // fill(#DB975E);
-    // strokeWeight(5);
-    // stroke(0);
-    // rect(-size.x / 2, -size.y / 2, size.x, size.y);
-    // popStyle();
-    // popMatrix();
     pushMatrix();
     translate(pos.x, pos.y);
     image(img, -size.x / 2, -size.y / 2, size.x, size.y);
