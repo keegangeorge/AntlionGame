@@ -17,11 +17,11 @@ class Ant extends Character {
     super(pos, size);
     energy = 100;
     isMoving = false;
-    avatarLeft = loadImage("ant-left-regular.png");
-    avatarRight = loadImage("ant-right-regular.png");
-    avatarRegular = loadImage("ant-regular.png");
-    avatarPowerUp = loadImage("ant-powerup.png");
-    avatarPowerDeplete = loadImage("ant-powerdeplete.png");
+    avatarLeft = loadImage("ant/ant-left-regular.png");
+    avatarRight = loadImage("ant/ant-right-regular.png");
+    avatarRegular = loadImage("ant/ant-regular.png");
+    avatarPowerUp = loadImage("ant/ant-powerup.png");
+    avatarPowerDeplete = loadImage("ant/ant-powerdeplete.png");
     goodFruitAcquired = false;
     badFruitAcquired = false;
   }

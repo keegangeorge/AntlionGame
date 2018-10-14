@@ -32,7 +32,7 @@ float cameraX, cameraY;
 boolean keyLeft, keyRight, keyUp, keyDown;
 PImage styleStick, styleRockOne, styleRockTwo;
 PVector styleStickSize, styleRockOneSize, styleRockTwoSize;
-
+PVector stickAssortment, rockOneAssortment, rockTwoAssortment;
 
 // GLOBAL OBJECTS //
 Hud headsUpDisplay;
@@ -44,7 +44,7 @@ ArrayList <PowerDepletion> badFruit = new ArrayList();
 ArrayList <Barrier> barrier = new ArrayList();
 ArrayList <Antlion> antlion = new ArrayList();
 float numFruits = 5;
-float numBarrier = 2;
+float numBarrier = 5;
 float numAntlion = 1;
 
 // AUDIO //
@@ -103,6 +103,10 @@ void loadScreenBackgrounds() {
   // bgLevelThree = requestImage()
 }
 
+/**
+ * Setup method
+ *
+ */
 void setup() {
   size(1280, 720);
   frameRate(60);
@@ -114,6 +118,7 @@ void setup() {
   loadScreenBackgrounds();
   initButtons();
   initBarrierInfo();
+
   initObjects();
 }
 
@@ -121,9 +126,13 @@ void initBarrierInfo() {
   styleStick = loadImage("obstacles/stick.png");
   styleRockOne = loadImage("obstacles/rock1.png");
   styleRockTwo = loadImage("obstacles/rock2.png");
+  // styleStickSize = new PVector(888, 223);
   styleStickSize = new PVector(200, 56);
   styleRockOneSize = new PVector(132, 68);
   styleRockTwoSize = new PVector(113, 68);
+  stickAssortment = new PVector(random(100, width - 100), random(-720, height / 2));
+  rockOneAssortment = new PVector(random(0 + styleRockOneSize.x / 2, width / 2), random(-720, height / 2));
+  rockTwoAssortment = new PVector(random(width / 2, width - styleRockTwoSize.x / 2), random(-720));
 }
 
 void initObjects() {
@@ -138,11 +147,21 @@ void initObjects() {
     badFruit.add(new PowerDepletion(new PVector(random(width), random(-720, height))));
   }
   // Barriers //
-  for (int i = 0; i < numBarrier; i++) {
-    barrier.add(new Barrier(styleStick, new PVector(random(100, width - 100), random(-720, height / 2)), styleStickSize));
-    barrier.add(new Barrier(styleRockOne, new PVector(random(0 + styleRockOneSize.x / 2, width / 2), random(-720, height / 2)), styleRockOneSize));
-    barrier.add(new Barrier(styleRockTwo, new PVector(random(width / 2, width - styleRockTwoSize.x / 2), random(-720)), styleRockTwoSize));
+  // for (int i = 0; i < numBarrier; i++) {
+  //   barrier.add(new Barrier(new PVector(random(width), random(-720, height / 2)), new PVector(random(200, 300), 50)));
+  // }
+  for (int i = 0; i < 15; i++) {
+    barrier.add(new Barrier(styleStick, stickAssortment, styleStickSize));
+    barrier.add(new Barrier(styleRockOne, rockOneAssortment, styleRockOneSize));
+    barrier.add(new Barrier(styleRockTwo, rockTwoAssortment, styleRockTwoSize));
   }
+
+  // for (int i = 0; i < numBarrier; i++) {
+  // }
+  //
+  // for (int i = 0; i < numBarrier; i++) {
+  // }
+
   // Ant //
   ant = new Ant(new PVector(height, width / 2), new PVector (74, 128));
   // Antlion //
@@ -154,6 +173,7 @@ void initObjects() {
 void draw() {
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   println("GAME STATE: " + gameState);
+  println(ant.pos.x);
   println(barrier.size());
 
   // REMOVE LATER! To test gameStates of win lose
@@ -164,19 +184,11 @@ void draw() {
   }
 
 
+  // pushMatrix();
+  // translate(0, cameraY);
   controlGameState();
+  // popMatrix();
 
-  if (gameState == GAME_OVER) {
-    btnPlayagain.pos.x = 434;
-    btnPlayagain.pos.y = 274;
-    btnMenu.pos.x = 694;
-    btnMenu.pos.y = 273;
-  } else if (gameState == WIN_SCREEN) {
-    btnPlayagain.pos.x = 314;
-    btnPlayagain.pos.y = 274;
-    btnMenu.pos.x = 568;
-    btnMenu.pos.y = 274;
-  }
 
   if (gameState == LVL_1 || gameState == LVL_2 || gameState == LVL_3) {
     headsUpDisplay.render();
@@ -223,6 +235,7 @@ void controlGameState() {
     cameraX = -ant.pos.x + width / 2;
     cameraY = (-ant.pos.y - 20) + width / 2;
     pushMatrix();
+
     translate(0, cameraY);
     ant.update();
 
@@ -263,7 +276,6 @@ void controlGameState() {
     break;
   case GAME_OVER: // gameState = 6;
     image(bgLose, 0, 0);
-
 
     btnPlayagain.update();
     btnMenu.update();
