@@ -32,6 +32,7 @@ float cameraX, cameraY;
 boolean keyLeft, keyRight, keyUp, keyDown;
 PImage styleStick, styleRockOne, styleRockTwo;
 PVector styleStickSize, styleRockOneSize, styleRockTwoSize;
+boolean performOperations;
 
 
 // GLOBAL OBJECTS //
@@ -43,10 +44,9 @@ Antlion antlion;
 ArrayList <PowerUps> goodFruit = new ArrayList();
 ArrayList <PowerDepletion> badFruit = new ArrayList();
 ArrayList <Barrier> barrier = new ArrayList();
-// ArrayList <Antlion> antlion = new ArrayList();
-float numFruits = 5;
+float numGoodFruits = 7;
+float numBadFruits = 6;
 float numBarrier = 2;
-// float numAntlion = 1;
 
 // AUDIO //
 
@@ -116,6 +116,7 @@ void setup() {
   initButtons();
   initBarrierInfo();
   initObjects();
+  performOperations = false;
 }
 
 void initBarrierInfo() {
@@ -131,12 +132,12 @@ void initObjects() {
   // HUD //
   headsUpDisplay = new Hud();
   // Good Fruit //
-  for (int i = 0; i < numFruits; i++) {
-    goodFruit.add(new PowerUps(new PVector(random(width), random(-720, height))));
+  for (int i = 0; i < numGoodFruits; i++) {
+    goodFruit.add(new PowerUps(new PVector(random(width), random(-1500, height))));
   }
   // Bad Fruit //
-  for (int i = 0; i < numFruits; i++) {
-    badFruit.add(new PowerDepletion(new PVector(random(width), random(-720, height))));
+  for (int i = 0; i < numBadFruits; i++) {
+    badFruit.add(new PowerDepletion(new PVector(random(width), random(-1300, height))));
   }
   // Barriers //
   for (int i = 0; i < numBarrier; i++) {
@@ -155,6 +156,29 @@ void initObjects() {
 }
 
 void draw() {
+  if (antlion.hitCharacter(ant)) {
+    if (ant.life == 3) {
+      goodFruit.clear();
+      badFruit.clear();
+      barrier.clear();
+      initObjects();
+      ant.life = 2;
+    } else if (ant.life == 2) {
+      goodFruit.clear();
+      badFruit.clear();
+      barrier.clear();
+      initObjects();
+      ant.life = 1;
+    } else if (ant.life == 1) {
+      gameState = GAME_OVER;
+      goodFruit.clear();
+      badFruit.clear();
+      barrier.clear();
+      initObjects();
+      ant.life = 0;
+    }
+  }
+
   println(ant.pos.y);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   println("GAME STATE: " + gameState);
@@ -213,8 +237,8 @@ void controlGameState() {
     btnRules.update();
 
     btnLevelOne.action(LVL_1);
-    btnLevelTwo.action(LVL_1);
-    btnLevelThree.action(LVL_1);
+    btnLevelTwo.action(LVL_2);
+    btnLevelThree.action(LVL_3);
     btnRules.action(RULES);
     break;
 
@@ -245,26 +269,132 @@ void controlGameState() {
 
     for (int i = 0; i < barrier.size(); i++) {
       Barrier b = barrier.get(i);
-        b.render();
-        b.acquire(barrier);
+      b.render();
+      b.acquire(barrier);
     }
 
-    // for (int i = 0; i < antlion.size(); i++) {
-    //   antlion.get(i).update();
-    // }
     antlion.update();
+    if (ant.pos.y <= -1400 && gameState == LVL_1) {
+      gameState = LVL_2;
+      performOperations = true;
+    }
+    pushMatrix();
+    pushStyle();
+    translate(0, -1500);
+    fill(#ff5964);
+    noStroke();
+    rect(0, 0, width, 100);
+    fill(255, 255, 255);
+    textSize(60);
+    textAlign(CENTER);
+    text("FINISH", width / 2, 70);
+    popStyle();
+    popMatrix();
     popMatrix();
     break;
 
   case LVL_2: // gameState = 4;
-    background(255);
-    // background(bgLevelTwo);
-    // render level 2 screen
+    if (performOperations == true) {
+      initLevelTwo();
+    }
+    background(#549949);
+
+    // Camera Position //
+    cameraX = -ant.pos.x + width / 2;
+    cameraY = (-ant.pos.y - 150) + width / 2;
+    pushMatrix();
+    translate(0, cameraY);
+    ant.update();
+
+
+    for (int i = 0; i < goodFruit.size(); i++) {
+      PowerUps pu = goodFruit.get(i);
+      pu.render();
+      pu.acquire(goodFruit);
+    }
+
+    for (int i = 0; i < badFruit.size(); i++) {
+      PowerDepletion pd = badFruit.get(i);
+      pd.render();
+      pd.acquire(badFruit);
+    }
+
+    for (int i = 0; i < barrier.size(); i++) {
+      Barrier b = barrier.get(i);
+      b.render();
+      b.acquire(barrier);
+    }
+
+    antlion.update();
+    if (ant.pos.y <= -1400 && gameState == LVL_2) {
+      gameState = LVL_3;
+      performOperations = true;
+    }
+    pushMatrix();
+    pushStyle();
+    translate(0, -1500);
+    fill(#ff5964);
+    noStroke();
+    rect(0, 0, width, 100);
+    fill(255, 255, 255);
+    textSize(60);
+    textAlign(CENTER);
+    text("FINISH", width / 2, 70);
+    popStyle();
+    popMatrix();
+    popMatrix();
     break;
+
   case LVL_3: // gameState = 5;
-    background(255, 0, 0);
-    // background(bgLevelThree);
-    // render level 3 screen
+    background(#386f4b);
+    if (performOperations == true) {
+      initLevelTwo();
+    }
+
+    // Camera Position //
+    cameraX = -ant.pos.x + width / 2;
+    cameraY = (-ant.pos.y - 150) + width / 2;
+    pushMatrix();
+    translate(0, cameraY);
+    ant.update();
+
+
+    for (int i = 0; i < goodFruit.size(); i++) {
+      PowerUps pu = goodFruit.get(i);
+      pu.render();
+      pu.acquire(goodFruit);
+    }
+
+    for (int i = 0; i < badFruit.size(); i++) {
+      PowerDepletion pd = badFruit.get(i);
+      pd.render();
+      pd.acquire(badFruit);
+    }
+
+    for (int i = 0; i < barrier.size(); i++) {
+      Barrier b = barrier.get(i);
+      b.render();
+      b.acquire(barrier);
+    }
+
+    antlion.update();
+    if (ant.pos.y <= -1400 && gameState == LVL_3) {
+      gameState = WIN_SCREEN;
+    }
+    pushMatrix();
+    pushStyle();
+    translate(0, -1500);
+    fill(#ff5964);
+    noStroke();
+    rect(0, 0, width, 100);
+    fill(255, 255, 255);
+    textSize(60);
+    textAlign(CENTER);
+    text("FINISH", width / 2, 70);
+    popStyle();
+    popMatrix();
+    popMatrix();
+
     break;
   case GAME_OVER: // gameState = 6;
     image(bgLose, 0, 0);
@@ -272,19 +402,45 @@ void controlGameState() {
 
     btnPlayagain.update();
     btnMenu.update();
+    ant.life = 3;
     btnPlayagain.action(LVL_1);
     btnMenu.action(LVL_SELECTOR);
     // render game over screen
     break;
   case WIN_SCREEN: // gameState = 7;
-  image(bgWin, 0, 0);
+    image(bgWin, 0, 0);
     btnPlayagain.update();
     btnMenu.update();
     btnPlayagain.action(LVL_1);
+    ant.life = 3;
     btnMenu.action(LVL_SELECTOR);
     // render winner screen
     break;
   }
+}
+
+void initLevelTwo() {
+  goodFruit.clear();
+  badFruit.clear();
+  barrier.clear();
+  numGoodFruits = 5;
+  numBadFruits = 5;
+  numBarrier = 4;
+  antlion.levelVelocity = 6;
+  initObjects();
+  performOperations = false;
+}
+
+void initLevelThree() {
+  goodFruit.clear();
+  badFruit.clear();
+  barrier.clear();
+  numGoodFruits = 5;
+  numBadFruits = 6;
+  numBarrier = 5;
+  antlion.levelVelocity = 10;
+  initObjects();
+  performOperations = false;
 }
 
 void keyPressed() {

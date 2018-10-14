@@ -10,7 +10,6 @@ class Barrier {
     this.img = img;
     this.pos = pos;
     this.size = size;
-
   }
 
   // METHODS //
