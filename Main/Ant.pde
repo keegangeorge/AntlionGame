@@ -11,6 +11,7 @@ class Ant extends Character {
   PImage avatarLeft, avatarRegular, avatarRight;
   PImage avatarPowerUp, avatarPowerDeplete;
   boolean goodFruitAcquired, badFruitAcquired;
+  float life;
 
   // CONSTRUCTOR //
   Ant(PVector pos, PVector size) {
@@ -24,6 +25,7 @@ class Ant extends Character {
     avatarPowerDeplete = loadImage("ant/ant-powerdeplete.png");
     goodFruitAcquired = false;
     badFruitAcquired = false;
+    life = 3;
   }
 
   void decrementEnergy(float damage) {

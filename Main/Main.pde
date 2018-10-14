@@ -37,15 +37,16 @@ PVector styleStickSize, styleRockOneSize, styleRockTwoSize;
 // GLOBAL OBJECTS //
 Hud headsUpDisplay;
 Ant ant;
+Antlion antlion;
 
 // GLOBAL ARRAYLISTS //
 ArrayList <PowerUps> goodFruit = new ArrayList();
 ArrayList <PowerDepletion> badFruit = new ArrayList();
 ArrayList <Barrier> barrier = new ArrayList();
-ArrayList <Antlion> antlion = new ArrayList();
+// ArrayList <Antlion> antlion = new ArrayList();
 float numFruits = 5;
 float numBarrier = 2;
-float numAntlion = 1;
+// float numAntlion = 1;
 
 // AUDIO //
 
@@ -146,12 +147,15 @@ void initObjects() {
   // Ant //
   ant = new Ant(new PVector(height, width / 2), new PVector (74, 128));
   // Antlion //
-  for (int i = 0; i < numAntlion; i++) {
-    antlion.add(new Antlion(new PVector(random(width), random(height)), new PVector(200, 175)));
-  }
+  // for (int i = 0; i < numAntlion; i++) {
+  //   antlion.add(new Antlion(new PVector(random(width), random(height)), new PVector(200, 175)));
+  // }
+  PVector antlionSize = new PVector(200, 175);
+  antlion = new Antlion(new PVector(200, height - 100), antlionSize);
 }
 
 void draw() {
+  println(ant.pos.y);
   surface.setTitle("Antlion Game" + "   | FPS: " + (int) frameRate);
   println("GAME STATE: " + gameState);
   println(barrier.size());
@@ -221,7 +225,7 @@ void controlGameState() {
     background(#8c6f43);
     // Camera Position //
     cameraX = -ant.pos.x + width / 2;
-    cameraY = (-ant.pos.y - 20) + width / 2;
+    cameraY = (-ant.pos.y - 150) + width / 2;
     pushMatrix();
     translate(0, cameraY);
     ant.update();
@@ -245,9 +249,10 @@ void controlGameState() {
         b.acquire(barrier);
     }
 
-    for (int i = 0; i < antlion.size(); i++) {
-      antlion.get(i).update();
-    }
+    // for (int i = 0; i < antlion.size(); i++) {
+    //   antlion.get(i).update();
+    // }
+    antlion.update();
     popMatrix();
     break;
 
